@@ -19,8 +19,7 @@ export const getRequests: RequestHandler = async (request, response) => {
 };
 
 export const getModels: RequestHandler = async (request, response) => {
-  const filters = filtersSchema.parse(request.query);
-  response.json({ success: true, data: await usageService.models(apiKey(request), filters) });
+  response.json({ success: true, data: await usageService.models(apiKey(request)) });
 };
 
 export const getCosts: RequestHandler = async (request, response) => {

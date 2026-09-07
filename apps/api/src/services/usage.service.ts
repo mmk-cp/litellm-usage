@@ -141,17 +141,14 @@ export class UsageService {
     };
   }
 
-  async models(apiKey: string, filters: UsageFilters) {
-    const [available, usage] = await Promise.all([
-      liteLLMClient.getAvailableModels(apiKey),
-      this.usage(apiKey, filters),
-    ]);
-    const used = new Set(usage.byModel.map((item) => item.model));
-    const models = new Set(
-      (available.data ?? []).map((item) => item.id).filter((id): id is string => Boolean(id)),
-    );
-    used.forEach((model) => models.add(model));
-    return [...models].sort().map((model) => ({ model, used: used.has(model) }));
+  async models(apiKey: string) {
+    const available = await liteLLMClient.getAvailableModels(apiKey);
+    return (available.data ?? [])
+      .map((item) => item.id)
+      .filter((id): id is string => Boolean(id))
+      .filter((model, index, models) => models.indexOf(model) === index)
+      .sort()
+      .map((model) => ({ model }));
   }
 
   async costs(apiKey: string, filters: UsageFilters) {

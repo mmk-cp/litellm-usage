@@ -50,6 +50,12 @@ export function DashboardClient({ keyId }: { keyId: string }) {
       api<UsageData>(`/keys/${keyId}/usage?${queryString(filters)}`).then((result) => result.data),
     placeholderData: (previous) => previous,
   });
+  const modelsQuery = useQuery({
+    queryKey: ["models", keyId],
+    queryFn: () =>
+      api<Array<{ model: string }>>(`/keys/${keyId}/models`).then((result) => result.data),
+    staleTime: 5 * 60_000,
+  });
   const requestParams = queryString(filters);
   requestParams.set("page", String(page));
   requestParams.set("limit", "25");
@@ -80,7 +86,12 @@ export function DashboardClient({ keyId }: { keyId: string }) {
   const retry = () => {
     void usageQuery.refetch();
     void requestsQuery.refetch();
+    void modelsQuery.refetch();
   };
+  const modelOptions =
+    modelsQuery.data?.map((item) => item.model) ??
+    usageQuery.data?.byModel.map((item) => item.model) ??
+    [];
 
   return (
     <AppShell
@@ -117,11 +128,7 @@ export function DashboardClient({ keyId }: { keyId: string }) {
         </Card>
       ) : usageQuery.data && requestsQuery.data ? (
         <>
-          <DashboardFiltersBar
-            filters={filters}
-            models={usageQuery.data.byModel.map((item) => item.model)}
-            onChange={changeFilters}
-          />
+          <DashboardFiltersBar filters={filters} models={modelOptions} onChange={changeFilters} />
           {usageQuery.data.truncated && (
             <div className="mb-4 rounded-md border border-amber-500/30 bg-amber-500/8 px-4 py-3 text-xs text-amber-800 dark:text-amber-300">
               Overview is based on the latest 50,000 matching requests. The request table remains
