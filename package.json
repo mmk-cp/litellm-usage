@@ -1,0 +1,21 @@
+{
+  "name": "litellm-usage-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,green \"npm run dev -w @litellm-usage/web\" \"npm run dev -w @litellm-usage/api\"",
+    "build": "npm run build -w @litellm-usage/api && npm run build -w @litellm-usage/web",
+    "lint": "npm run lint -w @litellm-usage/api && npm run lint -w @litellm-usage/web",
+    "format": "prettier --write . --ignore-path .gitignore",
+    "format:check": "prettier --check . --ignore-path .gitignore",
+    "typecheck": "npm run typecheck -w @litellm-usage/api && npm run typecheck -w @litellm-usage/web",
+    "test": "npm run test -w @litellm-usage/api"
+  },
+  "devDependencies": {
+    "concurrently": "latest",
+    "prettier": "latest"
+  }
+}
