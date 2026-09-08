@@ -63,21 +63,29 @@ export class LiteLLMClient {
         error instanceof Error &&
         (error.name === "TimeoutError" || error.name === "AbortError")
       ) {
-        throw new AppError(504, "LITELLM_TIMEOUT", "LiteLLM took too long to respond.");
+        throw new AppError(504, "LITELLM_TIMEOUT", "پاسخ LiteLLM بیش از حد طول کشید.");
       }
-      throw new AppError(503, "LITELLM_UNAVAILABLE", "LiteLLM is currently unavailable.");
+      throw new AppError(503, "LITELLM_UNAVAILABLE", "سرویس LiteLLM در حال حاضر در دسترس نیست.");
     }
 
     if (!response.ok) {
       if (response.status === 401)
-        throw new AppError(401, "INVALID_API_KEY", "The API key is invalid.");
+        throw new AppError(401, "INVALID_API_KEY", "کلید API واردشده معتبر نیست.");
       if (response.status === 403)
-        throw new AppError(403, "PERMISSION_DENIED", "This key cannot access the requested data.");
+        throw new AppError(403, "PERMISSION_DENIED", "این کلید به اطلاعات درخواستی دسترسی ندارد.");
       if (response.status === 429)
-        throw new AppError(429, "RATE_LIMITED", "LiteLLM rate limit reached. Try again shortly.");
+        throw new AppError(
+          429,
+          "RATE_LIMITED",
+          "محدودیت تعداد درخواست LiteLLM اعمال شده است. کمی بعد دوباره تلاش کنید.",
+        );
       if (response.status >= 500)
-        throw new AppError(503, "LITELLM_UNAVAILABLE", "LiteLLM is currently unavailable.");
-      throw new AppError(502, "LITELLM_ERROR", `LiteLLM returned HTTP ${response.status}.`);
+        throw new AppError(503, "LITELLM_UNAVAILABLE", "سرویس LiteLLM در حال حاضر در دسترس نیست.");
+      throw new AppError(
+        502,
+        "LITELLM_ERROR",
+        `LiteLLM با وضعیت HTTP ${response.status} پاسخ داد.`,
+      );
     }
 
     return (await response.json()) as T;

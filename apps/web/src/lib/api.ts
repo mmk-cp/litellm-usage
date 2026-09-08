@@ -24,7 +24,7 @@ export async function api<T>(path: string, init?: RequestInit): Promise<ApiRespo
     const error = body && !body.success ? body : null;
     throw new ApiClientError(
       error?.errorCode ?? "NETWORK_ERROR",
-      error?.message ?? "Unable to reach the server.",
+      error?.message ?? "ارتباط با سرور برقرار نشد.",
       response.status,
     );
   }
@@ -38,7 +38,7 @@ export async function apiPaginated<T>(path: string): Promise<RequestsResponse<T>
     const error = body && !body.success ? body : null;
     throw new ApiClientError(
       error?.errorCode ?? "NETWORK_ERROR",
-      error?.message ?? "Unable to reach the server.",
+      error?.message ?? "ارتباط با سرور برقرار نشد.",
       response.status,
     );
   }

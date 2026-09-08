@@ -8,7 +8,11 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   const secret = process.env.INTERNAL_API_SECRET;
   if (!backendUrl || !secret) {
     return NextResponse.json(
-      { success: false, message: "Server is not configured.", errorCode: "SERVER_CONFIG_ERROR" },
+      {
+        success: false,
+        message: "پیکربندی سرور کامل نیست.",
+        errorCode: "SERVER_CONFIG_ERROR",
+      },
       { status: 500 },
     );
   }
@@ -18,7 +22,11 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
     const contentType = request.headers.get("content-type") ?? "";
     if (contentLength > 16_384) {
       return NextResponse.json(
-        { success: false, message: "Request body is too large.", errorCode: "PAYLOAD_TOO_LARGE" },
+        {
+          success: false,
+          message: "حجم اطلاعات ارسال‌شده بیش از حد مجاز است.",
+          errorCode: "PAYLOAD_TOO_LARGE",
+        },
         { status: 413 },
       );
     }
@@ -26,7 +34,7 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
       return NextResponse.json(
         {
           success: false,
-          message: "Content-Type must be application/json.",
+          message: "نوع محتوای درخواست باید application/json باشد.",
           errorCode: "UNSUPPORTED_MEDIA_TYPE",
         },
         { status: 415 },
@@ -48,7 +56,11 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
         : await request.arrayBuffer();
     if (body && body.byteLength > 16_384) {
       return NextResponse.json(
-        { success: false, message: "Request body is too large.", errorCode: "PAYLOAD_TOO_LARGE" },
+        {
+          success: false,
+          message: "حجم اطلاعات ارسال‌شده بیش از حد مجاز است.",
+          errorCode: "PAYLOAD_TOO_LARGE",
+        },
         { status: 413 },
       );
     }
@@ -68,7 +80,7 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
     return new NextResponse(upstream.body, { status: upstream.status, headers: responseHeaders });
   } catch {
     return NextResponse.json(
-      { success: false, message: "API service is unavailable.", errorCode: "API_UNAVAILABLE" },
+      { success: false, message: "سرویس API در دسترس نیست.", errorCode: "API_UNAVAILABLE" },
       { status: 503 },
     );
   }

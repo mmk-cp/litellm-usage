@@ -21,31 +21,31 @@ export function SettingsClient() {
       /* Metadata must still be removable after cookie expiry. */
     }
     removeSavedKey(id);
-    toast.success("Saved key removed");
+    toast.success("کلید ذخیره‌شده حذف شد");
   };
   const clear = async () => {
     setClearing(true);
     await Promise.allSettled(keys.map((key) => api(`/keys/${key.id}`, { method: "DELETE" })));
     clearSavedKeys();
     setClearing(false);
-    toast.success("All saved keys cleared");
+    toast.success("همه کلیدهای ذخیره‌شده پاک شدند");
   };
 
   return (
-    <AppShell title="Settings" subtitle="Saved keys and browser privacy">
+    <AppShell title="تنظیمات" subtitle="مدیریت کلیدها و حریم خصوصی مرورگر">
       <div className="mx-auto max-w-4xl space-y-8">
         <section>
           <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
             <div>
-              <h2 className="text-lg font-bold">Saved API keys</h2>
+              <h2 className="text-lg font-bold">کلیدهای API ذخیره‌شده</h2>
               <p className="mt-1 text-sm text-[var(--muted)]">
-                Manage keys remembered by this browser.
+                کلیدهای ثبت‌شده در این مرورگر را مدیریت کنید.
               </p>
             </div>
             <Button asChild size="sm">
               <Link href="/">
                 <Plus className="size-4" />
-                Add key
+                افزودن کلید
               </Link>
             </Button>
           </div>
@@ -61,13 +61,16 @@ export function SettingsClient() {
                       <span className="block truncate text-sm font-semibold hover:text-[var(--primary)]">
                         {key.name}
                       </span>
-                      <span className="mt-0.5 block truncate font-mono text-xs text-[var(--muted)]">
+                      <span
+                        dir="ltr"
+                        className="mt-0.5 block truncate text-left font-mono text-xs text-[var(--muted)]"
+                      >
                         {key.maskedKey}
                       </span>
                     </Link>
                     <span className="hidden text-xs text-[var(--muted)] sm:block">
-                      Added{" "}
-                      {new Intl.DateTimeFormat("en", {
+                      افزوده‌شده در{" "}
+                      {new Intl.DateTimeFormat("fa-IR", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
@@ -77,8 +80,8 @@ export function SettingsClient() {
                       variant="ghost"
                       size="icon"
                       className="text-[var(--danger)]"
-                      title="Remove saved key"
-                      aria-label={`Remove ${key.name}`}
+                      title="حذف کلید ذخیره‌شده"
+                      aria-label={`حذف کلید ${key.name}`}
                       onClick={() => void remove(key.id)}
                     >
                       <Trash2 className="size-4" />
@@ -92,9 +95,9 @@ export function SettingsClient() {
                   <span className="mx-auto mb-3 grid size-10 place-items-center rounded-md bg-[var(--surface-muted)] text-[var(--muted)]">
                     <KeyRound className="size-4" />
                   </span>
-                  <h3 className="text-sm font-bold">No saved keys</h3>
+                  <h3 className="text-sm font-bold">هنوز کلیدی ذخیره نشده است</h3>
                   <p className="mt-1 text-xs text-[var(--muted)]">
-                    Connect a LiteLLM key to get started.
+                    برای شروع، یک کلید LiteLLM متصل کنید.
                   </p>
                 </div>
               </div>
@@ -102,23 +105,25 @@ export function SettingsClient() {
           </Card>
         </section>
         <section>
-          <h2 className="text-lg font-bold">Privacy</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">Control data retained in this browser.</p>
+          <h2 className="text-lg font-bold">حریم خصوصی</h2>
+          <p className="mt-1 text-sm text-[var(--muted)]">
+            داده‌های نگهداری‌شده در این مرورگر را کنترل کنید.
+          </p>
           <Card className="mt-4 flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
             <span className="grid size-10 shrink-0 place-items-center rounded-md bg-[var(--accent)] text-[var(--primary)]">
               <ShieldCheck className="size-4" />
             </span>
             <div className="flex-1">
-              <h3 className="text-sm font-bold">Clear saved keys</h3>
+              <h3 className="text-sm font-bold">پاک کردن کلیدهای ذخیره‌شده</h3>
               <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                Removes key labels, masked identifiers, and encrypted browser sessions. This does
-                not revoke keys in LiteLLM.
+                نام‌ها، شناسه‌های پوشانده‌شده و نشست‌های رمزگذاری‌شده مرورگر حذف می‌شوند. این عملیات
+                کلیدها را در LiteLLM باطل نمی‌کند.
               </p>
             </div>
             <Dialog.Root>
               <Dialog.Trigger asChild>
                 <Button variant="secondary" size="sm" disabled={!keys.length}>
-                  Clear saved keys
+                  پاک کردن کلیدها
                 </Button>
               </Dialog.Trigger>
               <Dialog.Portal>
@@ -127,25 +132,31 @@ export function SettingsClient() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <Dialog.Title className="text-base font-bold">
-                        Clear all saved keys?
+                        همه کلیدهای ذخیره‌شده پاک شوند؟
                       </Dialog.Title>
                       <Dialog.Description className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                        You will need to enter each API key again. Keys remain active in LiteLLM.
+                        برای استفاده دوباره باید هر کلید API را وارد کنید. کلیدها در LiteLLM فعال
+                        باقی می‌مانند.
                       </Dialog.Description>
                     </div>
                     <Dialog.Close asChild>
-                      <Button variant="ghost" size="icon" className="-mr-2 -mt-2 shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="-ml-2 -mt-2 shrink-0"
+                        aria-label="بستن پنجره"
+                      >
                         <X className="size-4" />
                       </Button>
                     </Dialog.Close>
                   </div>
                   <div className="mt-6 flex justify-end gap-2">
                     <Dialog.Close asChild>
-                      <Button variant="secondary">Cancel</Button>
+                      <Button variant="secondary">انصراف</Button>
                     </Dialog.Close>
                     <Dialog.Close asChild>
                       <Button variant="danger" disabled={clearing} onClick={() => void clear()}>
-                        {clearing ? "Clearing..." : "Clear all"}
+                        {clearing ? "در حال پاک کردن..." : "پاک کردن همه"}
                       </Button>
                     </Dialog.Close>
                   </div>

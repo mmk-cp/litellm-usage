@@ -3,7 +3,7 @@ import { ZodError } from "zod";
 import { AppError } from "../utils/app-error.js";
 
 export const notFound: RequestHandler = (_request, _response, next) => {
-  next(new AppError(404, "NOT_FOUND", "The requested endpoint does not exist."));
+  next(new AppError(404, "NOT_FOUND", "مسیر درخواستی وجود ندارد."));
 };
 
 export const errorHandler: ErrorRequestHandler = (error, _request, response, next) => {
@@ -11,7 +11,7 @@ export const errorHandler: ErrorRequestHandler = (error, _request, response, nex
   if (error instanceof ZodError) {
     response.status(400).json({
       success: false,
-      message: error.issues[0]?.message ?? "Invalid request.",
+      message: error.issues[0]?.message ?? "اطلاعات ارسال‌شده معتبر نیست.",
       errorCode: "VALIDATION_ERROR",
     });
     return;
@@ -25,7 +25,7 @@ export const errorHandler: ErrorRequestHandler = (error, _request, response, nex
   console.error("Unhandled API error");
   response.status(500).json({
     success: false,
-    message: "An unexpected error occurred.",
+    message: "خطایی پیش‌بینی‌نشده رخ داد.",
     errorCode: "INTERNAL_ERROR",
   });
 };

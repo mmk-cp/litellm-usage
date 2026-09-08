@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@fontsource-variable/vazirmatn";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -48,9 +49,13 @@ body {
   margin: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Vazirmatn Variable", Tahoma, Arial, sans-serif;
   letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+[dir="ltr"] {
+  font-family: Arial, Helvetica, sans-serif;
 }
 button,
 input,
@@ -82,16 +87,11 @@ a {
   mask-image: linear-gradient(to bottom, black, transparent 78%);
 }
 
-@keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 .animate-enter {
-  animation: enter 320ms ease-out both;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+.animate-enter:hover {
+  transform: translateY(-1px);
 }

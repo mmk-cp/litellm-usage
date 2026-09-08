@@ -45,32 +45,32 @@ export function RequestTable({
     <Card className="overflow-hidden">
       <div className="flex flex-col justify-between gap-3 border-b p-4 sm:flex-row sm:items-center sm:p-5">
         <div>
-          <h3 className="text-sm font-bold">Request log</h3>
+          <h3 className="text-sm font-bold">گزارش درخواست‌ها</h3>
           <p className="mt-1 text-xs text-[var(--muted)]">
-            {pagination.total.toLocaleString()} requests in this view
+            {pagination.total.toLocaleString("fa-IR")} درخواست در این نما
           </p>
         </div>
         <label className="relative block w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted)]" />
+          <Search className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted)]" />
           <Input
             value={search}
             onChange={(event) => onSearch(event.target.value)}
-            placeholder="Search request ID"
-            className="h-9 pl-9"
+            placeholder="جست‌وجوی شناسه درخواست"
+            className="h-9 pr-9"
           />
         </label>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[900px] border-collapse text-left text-sm">
+        <table className="w-full min-w-[900px] border-collapse text-right text-sm">
           <thead className="bg-[var(--surface-muted)] text-xs text-[var(--muted)]">
             <tr>
-              <th className="h-11 px-5">{header("Timestamp", "timestamp")}</th>
-              <th className="px-4">{header("Model", "model")}</th>
-              <th className="px-4">Request ID</th>
-              <th className="px-4 text-right">{header("Tokens", "tokens")}</th>
-              <th className="px-4 text-right">{header("Cost", "cost")}</th>
-              <th className="px-4">Status</th>
-              <th className="px-5 text-right">{header("Latency", "latency")}</th>
+              <th className="h-11 px-5">{header("زمان", "timestamp")}</th>
+              <th className="px-4">{header("مدل", "model")}</th>
+              <th className="px-4">شناسه درخواست</th>
+              <th className="px-4">{header("توکن‌ها", "tokens")}</th>
+              <th className="px-4">{header("هزینه", "cost")}</th>
+              <th className="px-4">وضعیت</th>
+              <th className="px-5">{header("زمان پاسخ", "latency")}</th>
             </tr>
           </thead>
           <tbody>
@@ -80,7 +80,7 @@ export function RequestTable({
                 className="border-t transition-colors hover:bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)]"
               >
                 <td className="whitespace-nowrap px-5 py-3.5 text-xs">
-                  {new Intl.DateTimeFormat("en", {
+                  {new Intl.DateTimeFormat("fa-IR", {
                     month: "short",
                     day: "numeric",
                     hour: "2-digit",
@@ -88,33 +88,36 @@ export function RequestTable({
                     second: "2-digit",
                   }).format(new Date(row.timestamp))}
                 </td>
-                <td className="max-w-48 truncate px-4 font-medium">{row.model}</td>
+                <td dir="ltr" className="max-w-48 truncate px-4 text-left font-medium">
+                  {row.model}
+                </td>
                 <td
-                  className="max-w-56 truncate px-4 font-mono text-xs text-[var(--muted)]"
+                  dir="ltr"
+                  className="max-w-56 truncate px-4 text-left font-mono text-xs text-[var(--muted)]"
                   title={row.requestId}
                 >
                   {row.requestId}
                 </td>
-                <td className="px-4 text-right tabular-nums">{formatCompact(row.tokens)}</td>
-                <td className="px-4 text-right tabular-nums">{formatCost(row.cost)}</td>
+                <td className="px-4 tabular-nums">{formatCompact(row.tokens)}</td>
+                <td className="px-4 tabular-nums">{formatCost(row.cost)}</td>
                 <td className="px-4">
                   <Badge variant={row.status === "success" ? "success" : "danger"}>
-                    {row.status === "success" ? "Success" : "Failed"}
+                    {row.status === "success" ? "موفق" : "ناموفق"}
                   </Badge>
                 </td>
-                <td className="px-5 text-right tabular-nums text-[var(--muted)]">
+                <td className="px-5 tabular-nums text-[var(--muted)]">
                   {row.latencyMs >= 1000
-                    ? `${(row.latencyMs / 1000).toFixed(2)}s`
-                    : `${Math.round(row.latencyMs)}ms`}
+                    ? `${(row.latencyMs / 1000).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} ثانیه`
+                    : `${Math.round(row.latencyMs).toLocaleString("fa-IR")} میلی‌ثانیه`}
                 </td>
               </tr>
             ))}
             {!rows.length && (
               <tr>
                 <td colSpan={7} className="h-44 text-center">
-                  <p className="text-sm font-semibold">No matching requests</p>
+                  <p className="text-sm font-semibold">درخواستی مطابق فیلترها پیدا نشد</p>
                   <p className="mt-1 text-xs text-[var(--muted)]">
-                    Adjust your filters or search term.
+                    فیلترها یا عبارت جست‌وجو را تغییر دهید.
                   </p>
                 </td>
               </tr>
@@ -124,7 +127,8 @@ export function RequestTable({
       </div>
       <div className="flex items-center justify-between border-t px-4 py-3 sm:px-5">
         <p className="text-xs text-[var(--muted)]">
-          Page {pagination.pages ? page : 0} of {pagination.pages}
+          صفحه {(pagination.pages ? page : 0).toLocaleString("fa-IR")} از{" "}
+          {pagination.pages.toLocaleString("fa-IR")}
         </p>
         <div className="flex gap-1">
           <Button
@@ -133,9 +137,9 @@ export function RequestTable({
             className="size-8"
             disabled={page <= 1}
             onClick={() => onPage(page - 1)}
-            aria-label="Previous page"
+            aria-label="صفحه قبلی"
           >
-            <ChevronLeft className="size-4" />
+            <ChevronRight className="size-4" />
           </Button>
           <Button
             variant="ghost"
@@ -143,9 +147,9 @@ export function RequestTable({
             className="size-8"
             disabled={page >= pagination.pages}
             onClick={() => onPage(page + 1)}
-            aria-label="Next page"
+            aria-label="صفحه بعدی"
           >
-            <ChevronRight className="size-4" />
+            <ChevronLeft className="size-4" />
           </Button>
         </div>
       </div>

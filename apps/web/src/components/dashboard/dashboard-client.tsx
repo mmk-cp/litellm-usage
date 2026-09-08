@@ -73,12 +73,12 @@ export function DashboardClient({ keyId }: { keyId: string }) {
   const errorTitle =
     error instanceof ApiClientError
       ? ({
-          RATE_LIMITED: "Rate limit reached",
-          PERMISSION_DENIED: "Permission denied",
-          LITELLM_UNAVAILABLE: "LiteLLM is unavailable",
-          LITELLM_TIMEOUT: "LiteLLM timed out",
-        }[error.code] ?? "Could not load usage")
-      : "Could not load usage";
+          RATE_LIMITED: "محدودیت تعداد درخواست",
+          PERMISSION_DENIED: "دسترسی غیرمجاز",
+          LITELLM_UNAVAILABLE: "سرویس LiteLLM در دسترس نیست",
+          LITELLM_TIMEOUT: "پاسخ LiteLLM بیش از حد طول کشید",
+        }[error.code] ?? "دریافت اطلاعات مصرف انجام نشد")
+      : "دریافت اطلاعات مصرف انجام نشد";
   const changeFilters = (next: DashboardFilters) => {
     setFilters(next);
     setPage(1);
@@ -95,8 +95,8 @@ export function DashboardClient({ keyId }: { keyId: string }) {
 
   return (
     <AppShell
-      title={savedKey?.name ?? "Usage dashboard"}
-      subtitle={savedKey?.maskedKey ?? "LiteLLM virtual key"}
+      title={savedKey?.name ?? "داشبورد مصرف"}
+      subtitle={savedKey?.maskedKey ?? "کلید مجازی LiteLLM"}
     >
       {usageQuery.isPending ? (
         <DashboardSkeleton />
@@ -107,20 +107,20 @@ export function DashboardClient({ keyId }: { keyId: string }) {
               {expired ? <KeyRound className="size-5" /> : <AlertTriangle className="size-5" />}
             </span>
             <h2 className="text-lg font-bold">
-              {expired ? "Key session unavailable" : errorTitle}
+              {expired ? "نشست این کلید در دسترس نیست" : errorTitle}
             </h2>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              {error instanceof Error ? error.message : "An unexpected error occurred."}
+              {error instanceof Error ? error.message : "خطایی پیش‌بینی‌نشده رخ داد."}
             </p>
             <div className="mt-5 flex justify-center gap-2">
               {expired ? (
                 <Button asChild>
-                  <Link href="/">Reconnect key</Link>
+                  <Link href="/">اتصال دوباره کلید</Link>
                 </Button>
               ) : (
                 <Button onClick={retry}>
                   <RefreshCw className="size-4" />
-                  Try again
+                  تلاش دوباره
                 </Button>
               )}
             </div>
@@ -131,8 +131,8 @@ export function DashboardClient({ keyId }: { keyId: string }) {
           <DashboardFiltersBar filters={filters} models={modelOptions} onChange={changeFilters} />
           {usageQuery.data.truncated && (
             <div className="mb-4 rounded-md border border-amber-500/30 bg-amber-500/8 px-4 py-3 text-xs text-amber-800 dark:text-amber-300">
-              Overview is based on the latest 50,000 matching requests. The request table remains
-              fully paginated.
+              نمای کلی بر اساس ۵۰٬۰۰۰ درخواست منطبق اخیر محاسبه شده است. جدول درخواست‌ها همچنان
+              صفحه‌بندی کامل دارد.
             </div>
           )}
           <OverviewCards summary={usageQuery.data.summary} />

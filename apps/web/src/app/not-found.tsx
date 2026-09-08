@@ -7,11 +7,11 @@ export default function NotFound() {
     <main className="grid min-h-screen place-items-center p-6 text-center">
       <div>
         <Logo className="mb-8 justify-center" />
-        <p className="text-6xl font-bold text-[var(--primary)]">404</p>
-        <h1 className="mt-4 text-xl font-bold">Page not found</h1>
-        <p className="mt-2 text-sm text-[var(--muted)]">The page you requested does not exist.</p>
+        <p className="text-6xl font-bold text-[var(--primary)]">۴۰۴</p>
+        <h1 className="mt-4 text-xl font-bold">صفحه پیدا نشد</h1>
+        <p className="mt-2 text-sm text-[var(--muted)]">صفحه‌ای که خواسته‌اید وجود ندارد.</p>
         <Button asChild className="mt-6">
-          <Link href="/">Back to keys</Link>
+          <Link href="/">بازگشت به کلیدها</Link>
         </Button>
       </div>
     </main>

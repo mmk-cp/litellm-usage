@@ -9,6 +9,6 @@ export const internalAuth: RequestHandler = (request, _response, next) => {
   const valid =
     supplied.length === expected.length &&
     timingSafeEqual(Buffer.from(supplied), Buffer.from(expected));
-  if (!valid) return next(new AppError(401, "UNAUTHORIZED", "Unauthorized request."));
+  if (!valid) return next(new AppError(401, "UNAUTHORIZED", "درخواست مجاز نیست."));
   next();
 };

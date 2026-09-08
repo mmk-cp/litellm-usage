@@ -13,22 +13,22 @@ import { Card } from "../ui/card";
 
 export function OverviewCards({ summary }: { summary: UsageData["summary"] }) {
   const cards = [
-    { label: "Total requests", value: formatCompact(summary.totalRequests), icon: Activity },
-    { label: "Total tokens", value: formatCompact(summary.totalTokens), icon: Cpu },
-    { label: "Total cost", value: formatCost(summary.totalCost), icon: Coins },
-    { label: "Input tokens", value: formatCompact(summary.inputTokens), icon: ArrowDownToLine },
-    { label: "Output tokens", value: formatCompact(summary.outputTokens), icon: ArrowUpFromLine },
-    { label: "Models used", value: String(summary.modelCount), icon: Boxes },
+    { label: "کل درخواست‌ها", value: formatCompact(summary.totalRequests), icon: Activity },
+    { label: "کل توکن‌ها", value: formatCompact(summary.totalTokens), icon: Cpu },
+    { label: "کل هزینه", value: formatCost(summary.totalCost), icon: Coins },
+    { label: "توکن‌های ورودی", value: formatCompact(summary.inputTokens), icon: ArrowDownToLine },
+    { label: "توکن‌های خروجی", value: formatCompact(summary.outputTokens), icon: ArrowUpFromLine },
+    { label: "مدل‌های استفاده‌شده", value: formatCompact(summary.modelCount), icon: Boxes },
     {
-      label: "Last activity",
+      label: "آخرین فعالیت",
       value: summary.lastUsed
-        ? new Intl.DateTimeFormat("en", {
+        ? new Intl.DateTimeFormat("fa-IR", {
             month: "short",
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
           }).format(new Date(summary.lastUsed))
-        : "No activity",
+        : "بدون فعالیت",
       icon: Clock3,
     },
   ];

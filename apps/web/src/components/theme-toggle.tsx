@@ -11,8 +11,8 @@ export function ThemeToggle() {
       type="button"
       variant="ghost"
       size="icon"
-      aria-label="Toggle color theme"
-      title="Toggle theme"
+      aria-label="تغییر حالت نمایش"
+      title="تغییر حالت نمایش"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
       <Moon className="size-4 dark:hidden" />

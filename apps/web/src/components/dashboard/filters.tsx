@@ -7,10 +7,10 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 const ranges = [
-  { value: "today", label: "Today" },
-  { value: "yesterday", label: "Yesterday" },
-  { value: "7d", label: "7 days" },
-  { value: "30d", label: "30 days" },
+  { value: "today", label: "امروز" },
+  { value: "yesterday", label: "دیروز" },
+  { value: "7d", label: "۷ روز اخیر" },
+  { value: "30d", label: "۳۰ روز اخیر" },
 ] as const;
 
 export function datesForRange(range: DashboardFilters["range"]) {
@@ -72,17 +72,17 @@ export function DashboardFiltersBar({
             className={`flex h-8 shrink-0 items-center gap-1.5 rounded px-3 text-xs font-semibold ${filters.range === "custom" ? "bg-[var(--foreground)] text-[var(--surface)]" : "text-[var(--muted)]"}`}
           >
             <CalendarDays className="size-3.5" />
-            Custom
+            بازه دلخواه
           </button>
         </div>
         <div className="flex flex-wrap gap-2">
           <select
-            aria-label="Filter by model"
+            aria-label="فیلتر بر اساس مدل"
             className="h-10 max-w-48 rounded-md border bg-[var(--surface)] px-3 text-sm"
             value={filters.model}
             onChange={(event) => onChange({ ...filters, model: event.target.value })}
           >
-            <option value="">All models</option>
+            <option value="">همه مدل‌ها</option>
             {models.map((model) => (
               <option key={model} value={model}>
                 {model}
@@ -90,21 +90,21 @@ export function DashboardFiltersBar({
             ))}
           </select>
           <select
-            aria-label="Filter by status"
+            aria-label="فیلتر بر اساس وضعیت"
             className="h-10 rounded-md border bg-[var(--surface)] px-3 text-sm"
             value={filters.status}
             onChange={(event) => onChange({ ...filters, status: event.target.value })}
           >
-            <option value="">All statuses</option>
-            <option value="success">Success</option>
-            <option value="failed">Failed</option>
+            <option value="">همه وضعیت‌ها</option>
+            <option value="success">موفق</option>
+            <option value="failed">ناموفق</option>
           </select>
           {hasAdvanced && (
             <Button
               variant="ghost"
               size="icon"
-              title="Reset filters"
-              aria-label="Reset filters"
+              title="پاک کردن فیلترها"
+              aria-label="پاک کردن فیلترها"
               onClick={() => onChange(defaultFilters)}
             >
               <RotateCcw className="size-4" />
@@ -118,18 +118,20 @@ export function DashboardFiltersBar({
           {filters.range === "custom" && (
             <>
               <label className="text-xs font-semibold text-[var(--muted)]">
-                From
+                از تاریخ
                 <Input
                   type="date"
+                  dir="ltr"
                   className="mt-1 h-9 w-40"
                   value={filters.startDate}
                   onChange={(event) => onChange({ ...filters, startDate: event.target.value })}
                 />
               </label>
               <label className="text-xs font-semibold text-[var(--muted)]">
-                To
+                تا تاریخ
                 <Input
                   type="date"
+                  dir="ltr"
                   className="mt-1 h-9 w-40"
                   value={filters.endDate}
                   onChange={(event) => onChange({ ...filters, endDate: event.target.value })}
@@ -138,24 +140,26 @@ export function DashboardFiltersBar({
             </>
           )}
           <label className="text-xs font-semibold text-[var(--muted)]">
-            Min cost
+            حداقل هزینه
             <Input
               type="number"
               min="0"
               step="0.0001"
               placeholder="$0"
+              dir="ltr"
               className="mt-1 h-9 w-28"
               value={filters.minCost}
               onChange={(event) => onChange({ ...filters, minCost: event.target.value })}
             />
           </label>
           <label className="text-xs font-semibold text-[var(--muted)]">
-            Max cost
+            حداکثر هزینه
             <Input
               type="number"
               min="0"
               step="0.0001"
-              placeholder="Any"
+              placeholder="بدون محدودیت"
+              dir="ltr"
               className="mt-1 h-9 w-28"
               value={filters.maxCost}
               onChange={(event) => onChange({ ...filters, maxCost: event.target.value })}
@@ -168,7 +172,7 @@ export function DashboardFiltersBar({
           className="text-xs font-semibold text-[var(--muted)] hover:text-[var(--primary)]"
           onClick={() => onChange({ ...filters, minCost: "0" })}
         >
-          + Cost range
+          + بازه هزینه
         </button>
       )}
     </div>

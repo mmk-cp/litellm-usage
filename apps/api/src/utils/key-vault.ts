@@ -16,6 +16,7 @@ export function sealApiKey(apiKey: string): string {
 export function unsealApiKey(payload: string): string {
   try {
     const data = Buffer.from(payload, "base64url");
+    if (data.toString("base64url") !== payload) throw new Error("Invalid sealed payload encoding");
     if (data.length < 29) throw new Error("Invalid sealed payload");
     const iv = data.subarray(0, 12);
     const tag = data.subarray(12, 28);
@@ -24,10 +25,6 @@ export function unsealApiKey(payload: string): string {
     decipher.setAuthTag(tag);
     return Buffer.concat([decipher.update(encrypted), decipher.final()]).toString("utf8");
   } catch {
-    throw new AppError(
-      401,
-      "KEY_SESSION_EXPIRED",
-      "This saved key session is no longer available.",
-    );
+    throw new AppError(401, "KEY_SESSION_EXPIRED", "نشست ذخیره‌شده این کلید دیگر در دسترس نیست.");
   }
 }

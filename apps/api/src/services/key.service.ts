@@ -7,9 +7,9 @@ export class KeyService {
     const response = await liteLLMClient.getKeyInfo(apiKey);
     const info = (response.info ?? response) as Record<string, unknown>;
     if (info.blocked === true)
-      throw new AppError(403, "KEY_BLOCKED", "This API key is blocked in LiteLLM.");
+      throw new AppError(403, "KEY_BLOCKED", "این کلید API در LiteLLM مسدود شده است.");
     if (typeof info.expires === "string" && new Date(info.expires).getTime() <= Date.now()) {
-      throw new AppError(401, "KEY_EXPIRED", "This API key has expired.");
+      throw new AppError(401, "KEY_EXPIRED", "اعتبار این کلید API به پایان رسیده است.");
     }
     return {
       id: keyId(apiKey),

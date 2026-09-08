@@ -24,6 +24,18 @@ const tooltipStyle = {
   boxShadow: "var(--shadow)",
 };
 
+const metricLabels = {
+  tokens: "توکن‌ها",
+  requests: "درخواست‌ها",
+  cost: "هزینه",
+} as const;
+
+function formatChartDate(value: string) {
+  return new Intl.DateTimeFormat("fa-IR", { month: "short", day: "numeric" }).format(
+    new Date(`${value}T00:00:00`),
+  );
+}
+
 export function UsageCharts({ data }: { data: UsageData }) {
   const [metric, setMetric] = useState<"tokens" | "requests" | "cost">("tokens");
   if (!data.daily.length)
@@ -31,11 +43,11 @@ export function UsageCharts({ data }: { data: UsageData }) {
       <Card className="mb-6 grid min-h-72 place-items-center p-8 text-center">
         <div>
           <div className="mx-auto mb-3 grid size-10 place-items-center rounded-md bg-[var(--surface-muted)] text-[var(--muted)]">
-            0
+            ۰
           </div>
-          <h3 className="text-sm font-bold">No usage in this period</h3>
+          <h3 className="text-sm font-bold">در این بازه مصرفی ثبت نشده است</h3>
           <p className="mt-1 text-xs text-[var(--muted)]">
-            Try a wider date range or clear filters.
+            بازه زمانی بزرگ‌تری انتخاب کنید یا فیلترها را پاک کنید.
           </p>
         </div>
       </Card>
@@ -45,9 +57,9 @@ export function UsageCharts({ data }: { data: UsageData }) {
       <Card className="min-w-0 p-4 sm:p-5">
         <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
           <div>
-            <h3 className="text-sm font-bold">Daily trend</h3>
+            <h3 className="text-sm font-bold">روند روزانه</h3>
             <p className="mt-1 text-xs text-[var(--muted)]">
-              Usage, request volume, and cost over time
+              تغییرات مصرف، تعداد درخواست و هزینه در طول زمان
             </p>
           </div>
           <div className="flex w-fit rounded-md bg-[var(--surface-muted)] p-1">
@@ -57,7 +69,7 @@ export function UsageCharts({ data }: { data: UsageData }) {
                 onClick={() => setMetric(item)}
                 className={`h-7 rounded px-2.5 text-xs font-semibold capitalize ${metric === item ? "bg-[var(--surface)] text-[var(--foreground)] shadow-sm" : "text-[var(--muted)]"}`}
               >
-                {item}
+                {metricLabels[item]}
               </button>
             ))}
           </div>
@@ -71,7 +83,7 @@ export function UsageCharts({ data }: { data: UsageData }) {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: "var(--muted)", fontSize: 11 }}
-                tickFormatter={(value: string) => value.slice(5)}
+                tickFormatter={formatChartDate}
               />
               <YAxis
                 axisLine={false}
@@ -84,12 +96,17 @@ export function UsageCharts({ data }: { data: UsageData }) {
               <Tooltip
                 contentStyle={tooltipStyle}
                 formatter={(value) =>
-                  metric === "cost" ? formatCost(Number(value)) : Number(value).toLocaleString()
+                  metric === "cost"
+                    ? formatCost(Number(value))
+                    : Number(value).toLocaleString("fa-IR")
                 }
+                labelFormatter={(value) => formatChartDate(String(value))}
               />
               <Line
                 type="monotone"
                 dataKey={metric}
+                name={metricLabels[metric]}
+                isAnimationActive={false}
                 stroke={
                   metric === "tokens"
                     ? "var(--chart-1)"
@@ -107,8 +124,8 @@ export function UsageCharts({ data }: { data: UsageData }) {
       </Card>
       <Card className="min-w-0 p-4 sm:p-5">
         <div className="mb-5">
-          <h3 className="text-sm font-bold">Cost by model</h3>
-          <p className="mt-1 text-xs text-[var(--muted)]">Highest spend models in selection</p>
+          <h3 className="text-sm font-bold">هزینه به تفکیک مدل</h3>
+          <p className="mt-1 text-xs text-[var(--muted)]">پرهزینه‌ترین مدل‌ها در بازه انتخابی</p>
         </div>
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -140,7 +157,14 @@ export function UsageCharts({ data }: { data: UsageData }) {
                 contentStyle={tooltipStyle}
                 formatter={(value) => formatCost(Number(value))}
               />
-              <Bar dataKey="cost" fill="var(--chart-3)" radius={[0, 3, 3, 0]} barSize={18} />
+              <Bar
+                dataKey="cost"
+                name="هزینه"
+                isAnimationActive={false}
+                fill="var(--chart-3)"
+                radius={[3, 0, 0, 3]}
+                barSize={18}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>

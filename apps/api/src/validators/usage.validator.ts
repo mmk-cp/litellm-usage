@@ -13,13 +13,13 @@ export const filtersSchema = z
     maxCost: optionalNumber,
   })
   .refine((data) => !data.startDate || !data.endDate || data.startDate <= data.endDate, {
-    message: "startDate must be before endDate",
+    message: "تاریخ شروع باید پیش از تاریخ پایان باشد.",
   })
   .refine(
     (data) =>
       data.minCost === undefined || data.maxCost === undefined || data.minCost <= data.maxCost,
     {
-      message: "minCost must not exceed maxCost",
+      message: "حداقل هزینه نمی‌تواند از حداکثر هزینه بیشتر باشد.",
     },
   );
 

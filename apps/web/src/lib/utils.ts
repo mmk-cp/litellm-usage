@@ -6,13 +6,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCompact(value: number): string {
-  return new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(
+  return new Intl.NumberFormat("fa-IR", { notation: "compact", maximumFractionDigits: 1 }).format(
     value,
   );
 }
 
 export function formatCost(value: number): string {
-  if (value === 0) return "$0.00";
-  if (value < 0.01) return `$${value.toFixed(4)}`;
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+  const digits = value > 0 && value < 0.01 ? 4 : 2;
+  return `${new Intl.NumberFormat("fa-IR", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value)} دلار`;
 }
